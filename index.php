@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
+//header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 
 // Константа:
@@ -14,31 +14,34 @@ define ('site_path', $site_path);
 include_once($site_path . "servises" . DIRSEP . "Autoloader.php");
 spl_autoload_register(array(new Autoloader(), 'getController'));
 
-$data = new RestRequest(); 
+$data = new RestRequest();
 
 switch($data->getMethod())  
 {  
-    case 'get':  
-        // retrieve a list of users
-        echo "THis is List!";  
+    case 'get':
+//    	$markers = MarkersRep::getMarkers();
+		$markers = array(1=>'a',2=>'b',3=>'c',);
+        if($data->getHttpAccept() == 'json')  
+        {  
+            RestUtils::sendResponse(200, json_encode($markers), 'application/json');  
+        }  
+        else if ($data->getHttpAccept() == 'xml')  
+        {  
+            // using the XML_SERIALIZER Pear Package  
+            $options = array  
+            (  
+                'indent' => '     ',  
+                'addDecl' => false,  
+                'rootName' => '',  
+                XML_SERIALIZER_OPTION_RETURN_RESULT => true  
+            );  
+            $serializer = new XML_Serializer($options);  
+  
+            RestUtils::sendResponse(200, $serializer->serialize($markers), 'application/xml');  
+        }
         break;  
     case 'post':  
-        $user = new User();  
-        $user->setFirstName($data->getData()->first_name);  // just for example, this should be done cleaner  
-        // and so on...  
-        $user->save();  
-        break;  
-    // etc, etc, etc...  
+        echo "This is POST"; 
+        break;
 } 
 ?>
-
-
-
-
-
-
-<pre>
-<?php
-//var_dump(RestUtils::processRequest());
-?>
-</pre>

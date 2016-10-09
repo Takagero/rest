@@ -10,7 +10,7 @@ class RestRequest
     {  
         $this->request_vars      = array();  
         $this->data              = '';  
-        $this->http_accept       = (strpos($_SERVER['HTTP_ACCEPT'], 'json')) ? 'json' : 'xml';  
+        $this->http_accept       = 'json';  
         $this->method            = 'get';  
     }  
   
