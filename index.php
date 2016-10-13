@@ -1,5 +1,4 @@
 <?php
-//header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 
 // Константа:
@@ -14,34 +13,26 @@ define ('site_path', $site_path);
 include_once($site_path . "servises" . DIRSEP . "Autoloader.php");
 spl_autoload_register(array(new Autoloader(), 'getController'));
 
-$data = new RestRequest();
+
+$data = RestUtils::processRequest();
 
 switch($data->getMethod())  
 {  
     case 'get':
-//    	$markers = MarkersRep::getMarkers();
-		$markers = array(1=>'a',2=>'b',3=>'c',);
-        if($data->getHttpAccept() == 'json')  
+    	
+		$resData = $data->getData();
+    	$newController = "Controller" . ucfirst($resData['route']);
+    	$controller = new $newController();
+    	$result = $controller->getMarkers($resData['cityId']);
+    	
+    	if($data->getHttpAccept() == 'json')  
         {  
-            RestUtils::sendResponse(200, json_encode($markers), 'application/json');  
-        }  
-        else if ($data->getHttpAccept() == 'xml')  
-        {  
-            // using the XML_SERIALIZER Pear Package  
-            $options = array  
-            (  
-                'indent' => '     ',  
-                'addDecl' => false,  
-                'rootName' => '',  
-                XML_SERIALIZER_OPTION_RETURN_RESULT => true  
-            );  
-            $serializer = new XML_Serializer($options);  
-  
-            RestUtils::sendResponse(200, $serializer->serialize($markers), 'application/xml');  
-        }
+//          RestUtils::sendResponse(500, '', 'text/html');
+			RestUtils::sendResponse(200, $result, 'application/json '); 
+        } 
         break;  
     case 'post':  
         echo "This is POST"; 
         break;
-} 
+}
 ?>

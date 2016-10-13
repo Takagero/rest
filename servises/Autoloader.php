@@ -2,7 +2,9 @@
 class Autoloader {
 	
 	protected $paths = array(
+	'controllers',
 	'servises',
+	'models',
 	'rest',
 	);
 	

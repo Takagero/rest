@@ -1,18 +1,18 @@
 <?php
 class RestRequest  
 {  
-    private $request_vars;  
-    private $data;  
-    private $http_accept;  
-    private $method;  
+    protected $request_vars;  
+    protected $data;
+    protected $method;
+    protected $http_accept;
   
     public function __construct()  
     {  
         $this->request_vars      = array();  
-        $this->data              = '';  
-        $this->http_accept       = 'json';  
+        $this->data              = '';
+        $this->http_accept       = 'json';
         $this->method            = 'get';  
-    }  
+    }
   
     public function setData($data)  
     {  
@@ -27,7 +27,7 @@ class RestRequest
     public function setRequestVars($request_vars)  
     {  
         $this->request_vars = $request_vars;  
-    }  
+    }
   
     public function getData()  
     {  
@@ -37,12 +37,12 @@ class RestRequest
     public function getMethod()  
     {  
         return $this->method;  
-    }  
-  
+    }
+    
     public function getHttpAccept()  
-    {  
+    {
         return $this->http_accept;  
-    }  
+    }
   
     public function getRequestVars()  
     {  
