@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-
 // Константа:
 define ('DIRSEP', DIRECTORY_SEPARATOR);
 
@@ -9,30 +7,35 @@ define ('DIRSEP', DIRECTORY_SEPARATOR);
 $site_path = realpath(dirname(__FILE__) . DIRSEP . '.' . DIRSEP) . DIRSEP ;
 define ('site_path', $site_path);
 
-// Автозагрузка классов на лету (стэк)
+// Автозагрузка классов
 include_once($site_path . "servises" . DIRSEP . "Autoloader.php");
 spl_autoload_register(array(new Autoloader(), 'getController'));
 
-
+// Получаем данные запроса и метод (GET или POST)
 $data = RestUtils::processRequest();
 
 switch($data->getMethod())  
 {  
     case 'get':
-    	
+    	// получаем данные гет запроса
 		$resData = $data->getData();
-    	$newController = "Controller" . ucfirst($resData['route']);
-    	$controller = new $newController();
-    	$result = $controller->getMarkers($resData['cityId']);
+    	$nameController = "Controller" . ucfirst($resData['route']);
     	
-    	if($data->getHttpAccept() == 'json')  
-        {  
-//          RestUtils::sendResponse(500, '', 'text/html');
-			RestUtils::sendResponse(200, $result, 'application/json '); 
-        } 
+    	if(class_exists($nameController) == false) // false, если класс не найден
+    	{
+    		RestUtils::sendResponse(400, '', 'text/html');
+    		exit();
+    	}
+    	$controller = new $nameController();
+    	$result = (isset($resData['cityId'])) ? $controller->getMarkerId($resData['cityId']) : $controller->getMarkers();
+    	
+    	RestUtils::sendResponse($result['status'], $result['content'], $result['content_type']);
         break;  
     case 'post':  
-        echo "This is POST"; 
+        $resData = $data->getData();
+    	$controller = new ControllerRating();
+		$result = $controller->add_rating($resData);
+    	RestUtils::sendResponse($result['status'], $result['content'], $result['content_type']);
         break;
 }
 ?>

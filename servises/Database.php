@@ -3,7 +3,7 @@
 class Database {
 
 	protected $host = 'localhost';
-	protected $dbName = 'root';
+	protected $dbName = 'extreme';
 	protected $user = 'root';
 	protected $pass = '';
 	
@@ -34,19 +34,13 @@ class Database {
 		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
-	public function fetchObj($sql, $class){	
-			
-		$query = $this->query($sql);
-		return $query->fetchAll(PDO::FETCH_OBJ);
-	}
-	
 	public function Qprepare($sql){
 		
 		return $query = $this->prepare($sql);
 	}
 	
-	public function lastInsertId($query){
-		return $query->lastInsertId();
+	public function lastInsertId(){
+		return $this->getConnect()->lastInsertId();
 	}
 
 }

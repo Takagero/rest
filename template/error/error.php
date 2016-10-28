@@ -5,7 +5,7 @@
 </head>
 <body>
 	<div>
-		<h1><?=RestUtils::getStatusCodeMessage($status);?></h1>  
+		<h1><?=$status;?> <?=RestUtils::getStatusCodeMessage($status);?></h1>  
 		<p><?=$message;?></p>  
 		<hr />  
 		<address><?=$signature;?></address> 

@@ -1,36 +1,20 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: DenJ
- * Date: 09.10.2016
- * Time: 15:32
- */
 class ControllerMarkers
 {
-
-
-    /**  @param "lat" - широта
-     *   @param "lng" - долгота
-     *   @param "content" - описание места
-     *   @param "pathFoto" - путь к фото места
-     *   @param "autor" - Автор записи
-     *   @param "date" - Дата создания записи
-     *    или
-     *   @param "err" - если город не найден.
-     *   @print передаем результат в формате JSON
-     */
-    public function getMarkers($cityId)
+	protected $statusError = array('status' => '406', 'content' => '' , 'content_type' => 'text/html');
+	
+    public function getMarkers()
     {
-        $query = MarkersRepository::getMarkers($cityId);
-        return json_encode($query);
-
+    	$markerRepository = new MarkersRepository();
+        return $markerRepository->getMarkers();
     }
-    /**
-     * @param array $markers
-     */
-//    public function setMarkers($markers)
-//    {
-//        $this->markers = $markers;
-//    }
+    
+    public function getMarkerId($cityId)
+    {
+    	$markerRepository = new MarkersRepository();
+    	// Проверка переменной
+    	return (!is_numeric($cityId)) ? $this->statusError : $markerRepository->getMarkerId($cityId);
+    }
 }
+?>

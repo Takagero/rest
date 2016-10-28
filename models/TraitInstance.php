@@ -1,5 +1,5 @@
 <?php
-trait Trateinstance {
+trait TraitInstance {
 	protected static $instance = null;
 	private function __construct(){}
 	private function __wakeup(){}
